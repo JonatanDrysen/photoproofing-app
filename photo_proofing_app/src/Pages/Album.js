@@ -40,6 +40,8 @@ const Album = (props) => {
     refetch: refetchPhotos,
   } = useFetch(`photo/album/${sentAlbum._id}`);
 
+  console.log("photosGet: ", photosGet)
+
   const {
     data: albumGet,
     loading: loadingAlbum,
