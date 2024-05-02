@@ -9,6 +9,10 @@ const PhotoSchema = new mongoose.Schema(
       maxlength: 100,
       required: true,
     },
+    data: {
+      type: Buffer,
+      required: true
+    },
     createdAt: {
       type: Date,
       default: Date.now,

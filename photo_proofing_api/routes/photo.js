@@ -65,6 +65,7 @@ router.get("/album/:id", verify, async (req, res) => {
   }
 });
 
+// Spara ny bild till databas
 router.post("/", verify, async (req, res) => {
   //Om req.files är satt
   if (req.files) {
@@ -117,6 +118,8 @@ router.post("/", verify, async (req, res) => {
         file.mimetype === "image/bmp" ||
         file.mimetype === "image/tiff"
       ) {
+        req.body.fileName = req.body.fileName.replace(/ /g, "_") // ersätt blanksteg i filnamn med underscore
+        
         file.mv(
           `${__dirname}/../../photo_proofing_app/public/Images/Photos/${req.body.fileName}`,
           async (err) => {
@@ -125,17 +128,21 @@ router.post("/", verify, async (req, res) => {
             }
           }
         );
+
         watermarkImage(
           "wm_" + req.body.fileName,
           `${__dirname}/../../photo_proofing_app/public/Images/Photos/${req.body.fileName}`,
           `${__dirname}/../../photo_proofing_app/public/Images/watermark.png`
         );
+
         const photo = new Photo({
           name: req.body.fileName,
+          data: file.data,
           watermarked: req.body.watermarked,
           album: req.body.album,
           owner: req.body.owner,
         });
+
         photosArray.push(photo);
       }
     }
